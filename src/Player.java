@@ -9,7 +9,7 @@ public class Player {
     private final ArrayList<Map<Integer, Integer>> visited;
 
     public Player(String name) {
-        location = Constants.getLoc(0, 0);
+        location = Helper.getLoc(0, 0);
         this.name = name;
         health = 100;
         inventory = new ArrayList<>();
@@ -27,7 +27,7 @@ public class Player {
             case "w", "west"  -> loc[0]--;
             default -> throw new Error("invalid direction");
         }
-        Location newLoc = Constants.getLoc(loc);
+        Location newLoc = Helper.getLoc(loc);
         if (newLoc == null) {
             System.out.println("You can't go that way.");
             return;

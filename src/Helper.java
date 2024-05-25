@@ -3,11 +3,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Constants {
+public class Helper {
     private static final String ROOM_DATA_FILE =
             String.format("src%sdata%sroom_data.tsv", File.separator, File.separator);
     private static final String NOUN_DATA_FILE =
             String.format("src%sdata%snoun_data.tsv", File.separator, File.separator);
+    public static final int ACCENT_COLOR = 34;
 
     public static Location getLoc(int x, int y) {
         try (Scanner scanner = new Scanner(new File(ROOM_DATA_FILE))) {
