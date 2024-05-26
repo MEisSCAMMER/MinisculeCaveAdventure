@@ -37,7 +37,7 @@ public class Helper {
             scanner.nextLine(); //skip the header
             while(scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split("\t");
-                if(Integer.parseInt(data[0])== x && Integer.parseInt(data[1])== y)
+                if(Integer.parseInt(data[0])==x && Integer.parseInt(data[1])==y)
                     nouns.add(new Noun(data[2], data[3], data[4], Boolean.parseBoolean(data[5])));
             }
         } catch (IOException e) {
@@ -49,5 +49,18 @@ public class Helper {
 
     public static Location getLoc(int[] loc) {
         return getLoc(loc[0], loc[1]);
+    }
+
+    public static boolean locExists(int x, int y) {
+        try (Scanner scanner = new Scanner(new File(ROOM_DATA_FILE))) {
+            scanner.nextLine(); //skip the header
+            while(scanner.hasNextLine()) {
+                String[] data = scanner.nextLine().split("\t");
+                if(Integer.parseInt(data[0])==x && Integer.parseInt(data[1])==y) return true;
+            }
+        } catch (IOException e) {
+            System.out.println("Oops, there's been an error: " + e.getMessage());
+        }
+        return false;
     }
 }

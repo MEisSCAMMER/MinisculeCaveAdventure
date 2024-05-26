@@ -16,6 +16,7 @@ public class Location {
         this.nouns = new ArrayList<>(List.of(nouns));
     }
 
+    //getters/setters
     public int getX()                 { return x; }
     public int getY()                 { return y; }
     public String getDescription()    { return description; }

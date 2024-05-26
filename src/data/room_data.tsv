@@ -1,4 +1,5 @@
 x	y	name	description
-0	0	Room	A bog-standard, generic room.
-0	1	Other room	Another room. I'm not really sure what you expected.
-1	0	Roomy room	This is a room that is quite roomlike. Its majestic roomness impresses you.
+0	0	Living room	This is the main room of your house. I'm kinda surprised that you needed me to describe your own house. Exits are to the north and east.
+0	1	Kitchen	Weirdly for you, but conveniently for me, the kitchen is quite empty, meaning there are no objects to take or use here. Exits are to the south and east.
+1	0	Roomy room	This is a room that is quite roomlike. Its majestic roomness impresses you. Exits are to the north and west.
+1	1	Door room	There's a door here. You're surprised because you're used to boring old FEATURELESS rooms. Exits are to the south and west.

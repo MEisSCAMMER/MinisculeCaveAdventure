@@ -7,22 +7,32 @@ public class Parser {
             "take", "get", "use"
     };
 
+    private static final String[] UNIMPORTANT_WORDS = {
+            "the", "a", "an", "I", "my", "brass"
+    };
+
     public Parser(Player player) { this.player = player; }
 
     public boolean parse(String input) {
         ArrayList<String> words = new ArrayList<>(List.of(input.split(" ")));
         words.replaceAll(String::toLowerCase);
-        words.removeIf(word -> word.equals("the"));
+        words.removeIf(word -> List.of(UNIMPORTANT_WORDS).contains(word));
         if(words.size() == 2) {
             //verb/noun
             if(List.of(VERBS).contains(words.get(0))) {
                 //do something with the verb
-                for(Noun noun: player.getInventory()) {
-                    if(noun.name().equals(words.get(1))) {
+                ArrayList<Noun> allNouns = player.getLocation().getNouns();
+                allNouns.addAll(player.getInventory());
+                for(Noun noun: allNouns) {
+                    if(noun.getShortName().equals(words.get(1))) {
                         //verb the noun
-                        noun.use();
+                        if(words.get(0).equals("use")) {
+                            noun.use();
+                            return true;
+                        }
                     }
                 }
+                System.out.println("You bozo! There is no " + words.get(1) + "!"); //we haven't found the noun
             } else {
                 //um
                 //think of something to do?
@@ -43,7 +53,7 @@ public class Parser {
                 }
                 default -> cantUnderstand();
             }
-        } else cantUnderstand();
+        } else return parse(words.get(0) + " " + words.get(1)); //just the first two non-important words
         return true;
     }
 
@@ -53,7 +63,7 @@ public class Parser {
         } else {
             System.out.println("You have:");
             for (Noun noun: player.getInventory()) {
-                System.out.println("- " + noun.name());
+                System.out.println("- " + noun.getName());
             }
         }
     }
@@ -81,10 +91,10 @@ public class Parser {
         System.out.printf("""
                 Miniscule Cave Adventure uses a text parser. Here are some commands you can use:
                 * \u001b[%dmN/S/E/W\u001b[0m to move
-                * \u001b[%dmL\u001b[0m or \u001b[%dmLOOK\u001b[0m to print the description of your current location
+                * \u001b[%dmL\u001b[0m or \u001b[%dmLOOK\u001b[0m to print a description of your current location
                 * \u001b[%dmI\u001b[0m or \u001b[%dmINVENTORY\u001b[0m to print the current contents of your inventory
                 * \u001b[%dmTAKE/GET [object]\u001b[0m to do nothing because I haven't implemented that yet
-                * \u001b[%dmUSE [object]\u001b[0m to also do nothing because I haven't implemented that either yet
+                * \u001b[%dmUSE [object]\u001b[0m to use an object. It doesn't do much yet but it works, technically
                 * \u001b[%dmQ\u001b[0m or \u001b[%dmQUIT\u001b[0m to... GEE I DON'T KNOW... quit
                 * \u001b[%dmH\u001b[0m or \u001b[%dmHELP\u001b[0m to print this message again%n""",
                 color, color, color, color, color, color, color, color, color, color, color
