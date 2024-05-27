@@ -30,6 +30,10 @@ public class Noun {
         return shortNames;
     }
 
+    public String getShortName() {
+        return shortNames[0];
+    }
+
     public String getDesc() {
         return desc;
     }

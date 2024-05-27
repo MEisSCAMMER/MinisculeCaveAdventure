@@ -22,6 +22,7 @@ public class Location {
     public String getDescription()    { return description; }
     public String getName()           { return name; }
     public ArrayList<Noun> getNouns() { return nouns; }
+    public void removeNoun(Noun noun) { nouns.remove(noun); }
 
     public void setNouns(ArrayList<Noun> nouns) {
         this.nouns.clear();

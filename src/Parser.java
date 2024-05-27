@@ -3,13 +3,9 @@ import java.util.List;
 
 public class Parser {
     private final Player player;
-    private static final String[] VERBS = {
-            "take", "get", "use"
-    };
+    private static final String[] VERBS = {"take", "get", "use", "drop", "examine"};
 
-    private static final String[] UNIMPORTANT_WORDS = {
-            "the", "a", "an", "I", "my", "brass"
-    };
+    private static final String[] UNIMPORTANT_WORDS = {"the", "a", "an", "I", "my"};
 
     public Parser(Player player) { this.player = player; }
 
@@ -17,43 +13,9 @@ public class Parser {
         ArrayList<String> words = new ArrayList<>(List.of(input.split(" ")));
         words.replaceAll(String::toLowerCase);
         words.removeIf(word -> List.of(UNIMPORTANT_WORDS).contains(word));
-        if(words.size() == 2) {
-            //verb/noun
-            if(List.of(VERBS).contains(words.get(0))) {
-                //do something with the verb
-                ArrayList<Noun> allNouns = player.getLocation().getNouns();
-                allNouns.addAll(player.getInventory());
-                for(Noun noun: allNouns) for(String name: noun.getShortNames()) {
-                    if(name.equals(words.get(1))) {
-                        //verb the noun
-                        if(words.get(0).equals("use")) {
-                            noun.use();
-                            return true;
-                        }
-                    }
-                }
-                System.out.println("You bozo! There is no " + words.get(1) + "!"); //we haven't found the noun
-            } else {
-                //um
-                //think of something to do?
-                cantUnderstand();
-            }
-        } else if(words.size() == 1) {
-            //single word
-            switch (words.get(0)) {
-                case "i", "inventory" -> printPlayerInventory();
-                case "n", "s", "w", "e" -> player.move(words.get(0));
-                case "h", "help" -> printHelp(Helper.ACCENT_COLOR);
-                case "l", "look" -> {
-                    System.out.println(player.getLocation().getDescription());
-                    printNouns(player.getLocation().getNouns());
-                }
-                case "q", "quit" -> {
-                    return false;
-                }
-                default -> cantUnderstand();
-            }
-        } else return parse(words.get(0) + " " + words.get(1)); //just the first two non-important words
+        if(words.size() == 2) parseTwoWords(words.get(0), words.get(1));
+        else if(words.size() == 1) return parseSingleWord(words.get(0));
+        else return parse(words.get(0) + " " + words.get(1)); //just the first two non-important words
         return true;
     }
 
@@ -93,11 +55,70 @@ public class Parser {
                 * \u001b[%dmN/S/E/W\u001b[0m to move
                 * \u001b[%dmL\u001b[0m or \u001b[%dmLOOK\u001b[0m to print a description of your current location
                 * \u001b[%dmI\u001b[0m or \u001b[%dmINVENTORY\u001b[0m to print the current contents of your inventory
-                * \u001b[%dmTAKE/GET [object]\u001b[0m to do nothing because I haven't implemented that yet
+                * \u001b[%dmTAKE/GET [object]\u001b[0m to take an object
+                * \u001b[%dmDROP [object]\u001b[0m to drop an object. Still ironing out the kinks in this and \u001b[%dmTAKE\u001b[0m
                 * \u001b[%dmUSE [object]\u001b[0m to use an object. It doesn't do much yet but it works, technically
-                * \u001b[%dmQ\u001b[0m or \u001b[%dmQUIT\u001b[0m to... GEE I DON'T KNOW... quit
+                * \u001b[%dmX/EXAMINE [object]\u001b[0m to examine an object. Also TBI
+                * \u001b[%dmQ\u001b[0m or \u001b[%dmQUIT\u001b[0m to... GEE I DON'T KNOW... quit the game
                 * \u001b[%dmH\u001b[0m or \u001b[%dmHELP\u001b[0m to print this message again%n""",
-                color, color, color, color, color, color, color, color, color, color, color
+                color, color, color, color, color, color, color, color, color, color, color, color, color, color
         );
+    }
+
+    private boolean parseSingleWord(String word) {
+        switch (word) {
+            case "i", "inventory" -> printPlayerInventory();
+            case "n", "s", "w", "e" -> player.move(word);
+            case "h", "help" -> printHelp(Helper.ACCENT_COLOR);
+            case "l", "look" -> {
+                System.out.println(player.getLocation().getDescription());
+                printNouns(player.getLocation().getNouns());
+            }
+            case "q", "quit" -> {
+                return false;
+            }
+            default -> cantUnderstand();
+        }
+        return true;
+    }
+
+    private void parseTwoWords(String word1, String word2) {
+        if(List.of(VERBS).contains(word1)) {
+            //do something with the verb
+            ArrayList<Noun> allNouns = new ArrayList<>();
+            allNouns.addAll(player.getLocation().getNouns());
+            allNouns.addAll(player.getInventory());
+            for(Noun noun: allNouns) for(String name: noun.getShortNames()) {
+                if(name.equals(word2)) {
+                    //verb the noun
+                    switch (word1) {
+                        case "use" -> {
+                            noun.use();
+                            return;
+                        }
+                        case "get", "take" -> {
+                            if (player.getLocation().getNouns().contains(noun)) {
+                                player.addToInventory(noun);
+                                player.getLocation().removeNoun(noun);
+                                //todo: remove noun from noun_data.tsv
+                                System.out.println("You take the " + noun.getShortName() + ".");
+                            } else System.out.println("You already have the " + noun.getShortName() + ".");
+                            return;
+                        }
+                        case "drop" -> {
+                            if (player.getInventory().contains(noun)) {
+                                player.removeFromInventory(noun);
+                                player.getLocation().getNouns().add(noun);
+                                //this works now. hooray!
+                                Helper.addNoun(player.getLocation().getX(), player.getLocation().getY(), noun);
+                                System.out.println("You drop the " + noun.getShortName() + ".");
+                            } else System.out.println("You don't have the " + noun.getShortName() + ".");
+                            return;
+                        }
+                    }
+                }
+            }
+            System.out.println("You bozo! There is no " + word2 + "!"); //we haven't found the noun
+        } else cantUnderstand();
     }
 }
