@@ -17,12 +17,12 @@ public class Parser {
     public boolean parse(String input) {
         ArrayList<String> words = new ArrayList<>(List.of(input.split(" ")));
         words.replaceAll(String::toLowerCase);
-        //remove punctuation
-        words.replaceAll(word -> word.replaceAll("[^a-zA-Z0-9]", ""));
-        words.removeIf(word -> List.of(UNIMPORTANT_WORDS).contains(word));
-        if(words.size() == 2) parseTwoWords(words.get(0), words.get(1));
-        else if(words.size() == 1) return parseSingleWord(words.get(0));
-        else return parse(words.get(0) + " " + words.get(1)); //just the first two non-important words
+        if(words.size() == 1) return parseSingleWord(words.get(0));
+        words.replaceAll(word -> word.replaceAll("[^a-z0-9]", "")); //remove punctuation
+        words.removeIf(word -> List.of(UNIMPORTANT_WORDS).contains(word)); //remove unimportant words
+        if(words.isEmpty() || words.size() == 1) cantUnderstand(); //the player's being unintelligible
+        else if(words.size() == 2) parseTwoWords(words.get(0), words.get(1));
+        else return parse(words.get(0) + " " + words.get(1)); //just the first two unimportant words
         return true;
     }
 
