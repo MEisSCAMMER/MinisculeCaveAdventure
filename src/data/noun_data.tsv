@@ -1,5 +1,4 @@
 x	y	name	shortNames	desc	isTakeable
 0	0	a brass lantern	lantern,lamp,brass	It's full of flammable kerosene. Kind of bad for the environment. Oh well.	true
-0	0	a sandwich	sandwich	You begin to get hungry staring at it. Maybe you should put it away.	true
 1	0	a shiny key	key,shiny	It's... a key. I'm not sure what you expected from it. It is pretty shiny though.	true
 1	1	a door	door	It's locked. There's a keyhole, though.	false
