@@ -23,8 +23,8 @@ public class Parser {
                 //do something with the verb
                 ArrayList<Noun> allNouns = player.getLocation().getNouns();
                 allNouns.addAll(player.getInventory());
-                for(Noun noun: allNouns) {
-                    if(noun.getShortName().equals(words.get(1))) {
+                for(Noun noun: allNouns) for(String name: noun.getShortNames()) {
+                    if(name.equals(words.get(1))) {
                         //verb the noun
                         if(words.get(0).equals("use")) {
                             noun.use();

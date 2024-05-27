@@ -38,7 +38,7 @@ public class Helper {
             while(scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split("\t");
                 if(Integer.parseInt(data[0])==x && Integer.parseInt(data[1])==y)
-                    nouns.add(new Noun(data[2], data[3], data[4], Boolean.parseBoolean(data[5])));
+                    nouns.add(new Noun(data[2], data[3].split(","), data[4], Boolean.parseBoolean(data[5])));
             }
         } catch (IOException e) {
             System.out.println("Oops, there's been an error: " + e.getMessage());
