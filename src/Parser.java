@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Parser {
     private final Player player;
-    private static final String[] VERBS = {"take", "get", "use", "drop", "examine"};
+    private static final String[] VERBS = {"take", "get", "use", "drop", "examine", "x"};
 
     private static final String[] UNIMPORTANT_WORDS = {"the", "a", "an", "I", "my"};
 
@@ -95,8 +95,7 @@ public class Parser {
                         case "use" -> {
                             noun.use();
                             return;
-                        }
-                        case "get", "take" -> {
+                        } case "get", "take" -> {
                             if (player.getLocation().getNouns().contains(noun)) {
                                 player.addToInventory(noun);
                                 player.getLocation().removeNoun(noun);
@@ -104,8 +103,7 @@ public class Parser {
                                 System.out.println("You take the " + noun.getShortName() + ".");
                             } else System.out.println("You already have the " + noun.getShortName() + ".");
                             return;
-                        }
-                        case "drop" -> {
+                        } case "drop" -> {
                             if (player.getInventory().contains(noun)) {
                                 player.removeFromInventory(noun);
                                 player.getLocation().getNouns().add(noun);
@@ -114,7 +112,10 @@ public class Parser {
                                 System.out.println("You drop the " + noun.getShortName() + ".");
                             } else System.out.println("You don't have the " + noun.getShortName() + ".");
                             return;
-                        }
+                        } case "examine", "x" -> {
+                            System.out.println(noun.getDesc());
+                            return;
+                        } default -> {}
                     }
                 }
             }
