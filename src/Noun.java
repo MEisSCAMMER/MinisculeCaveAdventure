@@ -1,20 +1,20 @@
 public class Noun {
     private final String name;
-    private final String shortName;
+    private final String[] shortNames;
     private final String desc;
     private final boolean isTakeable;
     private boolean isUsed = false; //eventually there may be functionality depending on whether an item has been used
 
-    public Noun(String name, String shortName, String desc, boolean isTakeable) {
+    public Noun(String name, String[] shortNames, String desc, boolean isTakeable) {
         this.name = name;
-        this.shortName = shortName;
+        this.shortNames = shortNames;
         this.desc = desc;
         this.isTakeable = isTakeable;
     }
 
     public void use() {
         isUsed = true;
-        System.out.println("You use the " + shortName + ".");
+        System.out.println("You use the " + shortNames[0] + ".");
     }
 
     @Override
@@ -26,8 +26,12 @@ public class Noun {
         return name;
     }
 
+    public String[] getShortNames() {
+        return shortNames;
+    }
+
     public String getShortName() {
-        return shortName;
+        return shortNames[0];
     }
 
     public String getDesc() {

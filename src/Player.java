@@ -14,6 +14,8 @@ public class Player {
         this.name = name;
         health = 100;
         inventory = new ArrayList<>();
+        inventory.add(new Noun("a burning sense of adventure", new String[]{"adventure", "sense", "burning"},
+                "It's pretty burning, man.", true));
         visited = new ArrayList<>();
         visited.add(Map.of(0, 0)); //we've already visited the room we start in
     }
@@ -49,6 +51,10 @@ public class Player {
 
     public void addToInventory(Noun noun) {
         inventory.add(noun);
+    }
+
+    public void removeFromInventory(Noun noun) {
+        inventory.remove(noun);
     }
 
     public void takeDamage(int health) {

@@ -1,5 +1,5 @@
 public class Sandwich extends Noun { //BetterNoun™
-    public Sandwich(String name, String shortName, String desc, boolean isTakeable) {
+    public Sandwich(String name, String[] shortName, String desc, boolean isTakeable) {
         super(name, shortName, desc, isTakeable);
     }
 
