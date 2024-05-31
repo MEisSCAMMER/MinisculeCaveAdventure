@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class Parser {
     private final Player player;
     private final Game game;
-    private static final String[] VERBS = {"take", "get", "use", "drop", "examine", "x", "go", "enter"};
+    private static final String[] VERBS = {"take", "get", "use", "drop", "examine", "x", "go", "enter", "eat"};
 
     private static final String[] UNIMPORTANT_WORDS = {"the", "a", "an", "i", "my", "on"};
 
@@ -85,7 +85,10 @@ public class Parser {
             allNouns.addAll(player.getInventory());
             for(Noun noun: allNouns) for(String name: noun.getShortNames()) {
                 if(name.equals(word2)) switch (word1) {
-                    case "use" -> {
+                    case "eat" -> {
+                        System.out.println("You're not hungry.");
+                        return;
+                    } case "use" -> {
                         noun.use(player, false);
                         return;
                     } case "get", "take" -> {
