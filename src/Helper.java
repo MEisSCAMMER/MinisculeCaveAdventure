@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Helper {
@@ -10,7 +12,8 @@ public class Helper {
             String.format("src%sdata%snoun_data.tsv", File.separator, File.separator);
     public static final String ORIGINAL_NOUN_DATA_FILE =
             String.format("src%sdata%snoun_data_original.tsv", File.separator, File.separator);
-    public static final int ACCENT_COLOR = 34;
+    public static final int ACCENT_COLOR = 34; //blue
+    public static final String VERSION = "0.1.0";
 
     /**
      * @param x the x-coordinate of the noun(s).
@@ -39,6 +42,7 @@ public class Helper {
      * @return a Location object representing the location at the specified coordinates.
      */
     public static Location getLoc(int x, int y) {
+        //we're reading the locations file to find if there's a location, and if so, we read the file for data
         try (Scanner scanner = new Scanner(new File(ROOM_DATA_FILE))) {
             scanner.nextLine(); //skip the header
             Location l = null;
@@ -49,7 +53,7 @@ public class Helper {
                     break;
                 }
             }
-            if(l == null) return null;
+            if(l == null) return null; //the location doesn't exist
             ArrayList<Noun> nouns = getNouns(x, y);
             if(!nouns.isEmpty()) l.setNouns(nouns);
             return l;
@@ -134,9 +138,33 @@ public class Helper {
 
             data.deleteCharAt(data.length()-1); //and delete that last newline
 
-            java.nio.file.Files.writeString(java.nio.file.Paths.get(NOUN_DATA_FILE), data.toString());
+            java.nio.file.Files.writeString(Paths.get(NOUN_DATA_FILE), data.toString());
         } catch (IOException e) {
             System.out.println("Oops, there's been an error: " + e.getMessage());
         }
+    }
+
+    public static ArrayList<String> getExits(int x, int y) {
+        ArrayList<String> exits = new ArrayList<>();
+        if(locExists(x, y+1)) exits.add("north");
+        if(locExists(x, y-1)) exits.add("south");
+        if(locExists(x+1, y)) exits.add("east");
+        if(locExists(x-1, y)) exits.add("west");
+        return exits;
+    }
+
+    public static <T> String concatenateList(List<T> list) {
+        if(list.isEmpty()) return null;
+        if(list.size()==1) return list.get(0).toString();
+        if(list.size()==2) return list.get(0) + " and " + list.get(1);
+        T last = list.remove(list.size()-1);
+        StringBuilder sb = new StringBuilder();
+        for (T s: list) sb.append(s).append(", ");
+        sb.append("and ").append(last);
+        return sb.toString();
+    }
+
+    public static void printExits(int x, int y) {
+        System.out.println("Exits are to the " + concatenateList(getExits(x, y)) + ".");
     }
 }

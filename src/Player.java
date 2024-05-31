@@ -45,7 +45,8 @@ public class Player {
         hasVisited = visited.contains(Map.of(loc[0], loc[1]));
         if (!hasVisited) visited.add(Map.of(loc[0], loc[1]));
         location = newLoc;
-        System.out.println(location.getName() + (hasVisited ? "" : ("\n" + location.getDescription())));
+        System.out.print(location.getName() + (hasVisited ? "\n" : ("\n" + location.getDescription() + " ")));
+        if(!hasVisited) Helper.printExits(location.getX(), location.getY());
         Parser.printNouns(location.getNouns());
     }
 
@@ -58,13 +59,27 @@ public class Player {
     }
 
     public void takeDamage(int health) {
-        if(this.health-health>0) this.health -= health;
-        else this.health=0;
+        if(this.health-health > 0) {
+            this.health -= health;
+            System.out.printf("You have lost %d health. You have %d health remaining.", health, this.health);
+        } else {
+            System.out.printf("You were about to lose %d health, but you only had %d to begin with.", health,
+                    this.health);
+            System.out.println("I don't know how to break it to you, but...");
+            die();
+            this.health = 0;
+        }
     }
 
     public void heal(int health) {
         if(health+this.health<=100) this.health += health;
         else this.health = 100;
+    }
+
+    private void die() {
+        System.out.println("\n***You have died***");
+        System.out.println("Would you like to restart?");
+        System.out.println("Whoops, you can't answer that. Because you're dead.");
     }
 
     public String getName() { return name; }
