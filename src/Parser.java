@@ -56,7 +56,7 @@ public class Parser {
                 System.out.println(player.getLocation().getDescription());
                 printNouns(player.getLocation().getNouns());
             }
-            case "q", "quit" -> {
+            case "q", "quit", "lose" -> {
                 return false;
             }
             case "win" -> game.winSequence(1);
@@ -120,7 +120,8 @@ public class Parser {
                             if(noun.isUsed()) {
                                 game.winSequence(1000000);
                                 return;
-                            }
+                            } else System.out.println("It's locked. Of course it is. " +
+                                    "Nothing's ever EASY around here, is it?");
                         } else System.out.println("You can't enter that.");
                         return;
                     } default -> {}
