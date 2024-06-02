@@ -2,5 +2,5 @@ x	y	name	shortNames	desc	isTakeable
 0	0	a brass lantern	lantern,lamp,brass	It's currently off, but full of flammable kerosene. Kind of bad for the environment. Oh well.	true
 0	0	a sandwich	sandwich	There's entirely too much mayo on it.	true
 1	0	a shiny key	key,shiny	It's... a key. I'm not sure what you expected from it. It is pretty shiny though.	true
-1	1	a door	door	It's locked. There's a keyhole, though.	false
+1	2	a door	door	It's locked. There's a keyhole, though.	false
 2	0	a bathtub	tub,bathtub	It's empty. It looks like it's been empty a long while.	false
