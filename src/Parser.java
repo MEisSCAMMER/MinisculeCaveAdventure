@@ -3,12 +3,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Parser {
     private final Player player;
     private final Game game;
-    private static final String[] VERBS = {"take", "get", "use", "drop", "examine", "x", "go", "enter", "eat"};
+    private static final String[] VERBS =
+            {"take", "get", "use", "drop", "examine", "x", "go", "enter", "eat", "attack"};
 
     private static final String[] UNIMPORTANT_WORDS = {"the", "a", "an", "i", "my", "on"};
 
@@ -20,7 +20,7 @@ public class Parser {
     /**
      * Parses the input string and performs the appropriate action.
      * @param input the input string to parse.
-     * @return false if the player has quit, true otherwise.
+     * @return false if the player has quit or died, true otherwise.
      */
     public boolean parse(String input) {
         //to handle multicommand commands
@@ -38,7 +38,7 @@ public class Parser {
         if(words.isEmpty() || words.size() == 1) cantUnderstand(); //the player's being unintelligible
         else if(words.size() == 2) parseTwoWords(words.get(0), words.get(1));
         else return parse(words.get(0) + " " + words.get(1)); //just the first two unimportant words
-        return true;
+        return player.getHealth() != 0; //check if the player's dead, if so return false. otherwise return true
     }
 
     /**
@@ -124,6 +124,13 @@ public class Parser {
                                     "Nothing's ever EASY around here, is it?");
                         } else System.out.println("You can't enter that.");
                         return;
+                    } case "attack" -> {
+                        System.out.println("Yeah, I can see why you'd want to attack that. You can't, though.");
+                        System.out.printf("You know what? Just for trying to attack an innocent %s, a monster " +
+                                "appears out of nowhere and slaps you silly, disappearing as suddenly as it came!\n",
+                                noun.getShortName());
+                        player.takeDamage((int) (Math.random() * 20) + 1);
+                        return;
                     } default -> {}
                 }
             }
@@ -167,12 +174,13 @@ public class Parser {
                 * \u001b[%dmdrop [object]\u001b[0m to drop an object
                 * \u001b[%dmuse [object]\u001b[0m to use an object. It doesn't do much yet but it works, technically
                 * \u001b[%dmx\u001b[0m/\u001b[%dmexamine [object]\u001b[0m to examine an object
+                * \u001b[%dmattack [object]\u001b[0m to attack an object. But you know, maybe give peace a chance?
                 * \u001b[%dmq\u001b[0m or \u001b[%dmquit\u001b[0m to... GEE I DON'T KNOW... quit the game
                 * \u001b[%dmh\u001b[0m or \u001b[%dmhelp\u001b[0m to print this message again.
                 If you want to enter multiple commands in one line, simply separate them with a semicolon.
                 """,
                 Helper.VERSION, color, color, color, color, color, color, color, color, color, color, color, color,
-                color, color, color, color, color, color
+                color, color, color, color, color, color, color
         );
     }
 
@@ -181,7 +189,8 @@ public class Parser {
         System.out.print("On what?\n> ");
         String line = scanner.nextLine();
         String[] parsedWords = line.strip().toLowerCase().replaceAll("[^a-z0-9 ]", "").split(" ");
-        String parsed = Arrays.stream(parsedWords).filter(word -> !List.of(UNIMPORTANT_WORDS).contains(word)).findFirst().orElse("");
+        String parsed = Arrays.stream(parsedWords).filter(word -> !List.of(UNIMPORTANT_WORDS).contains(word))
+                .findFirst().orElse("");
         String steve = Arrays.stream(parsedWords).filter(word -> !List.of(UNIMPORTANT_WORDS).contains(word))
                 .collect(Collectors.joining(" "));
         ArrayList<Noun> allNouns = new ArrayList<>();

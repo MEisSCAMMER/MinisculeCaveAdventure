@@ -1,6 +1,7 @@
-x	y	name	description
-0	0	Living room	This is the main room of a house. You note that you've never seen this house before. You wonder how you got here.
-0	1	Kitchen	Weirdly for you, but conveniently for me, the kitchen is quite empty, meaning there are no objects to take or use here. Unless you put something here.
-1	0	Roomy room	This is a room that is quite roomlike. Its majestic roomness impresses you.
-1	1	Door room	There's a door here. You're surprised because you're used to boring old FEATURELESS rooms.
-2	0	Bathroom	This is an empty room. You're meant to take baths in this room, which is why it's called a "bathroom". Clever, I know.
+x	y	name	description	isDark
+0	0	Living room	This is the main room of a house. You note that you've never seen this house before. You wonder how you got here.	false
+0	1	Kitchen	Weirdly for you, but conveniently for me, the kitchen is quite empty, meaning there are no objects to take or use here. Unless you put something here.	false
+1	0	Roomy room	This is a room that is quite roomlike. Its majestic roomness impresses you.	false
+1	1	Door room	There's a door here. You're surprised because you're used to boring old FEATURELESS rooms.	false
+2	0	Bathroom	This is an empty room. You're meant to take baths in this room, which is why it's called a "bathroom". Clever, I know.	false
+3	0	Dark room	Amazingly enough, there are no monsters. It really is just a darkroom used for photography.	true

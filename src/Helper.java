@@ -49,7 +49,9 @@ public class Helper {
             while(scanner.hasNextLine()) {
                 String[] data = scanner.nextLine().split("\t");
                 if(Integer.parseInt(data[0])==x && Integer.parseInt(data[1])==y) {
-                    l = new Location(x, y, data[2], data[3]);
+                    //if it's dark make a DarkLocation else a regular Location
+                    if(Boolean.parseBoolean(data[4])) l = new DarkLocation(x, y, data[2], data[3]);
+                    else l = new Location(x, y, data[2], data[3]);
                     break;
                 }
             }

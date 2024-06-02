@@ -23,6 +23,7 @@ public class Location {
     public String getName()           { return name; }
     public ArrayList<Noun> getNouns() { return nouns; }
     public void removeNoun(Noun noun) { nouns.remove(noun); }
+    public boolean isDark()           { return false; }
 
     public void setNouns(ArrayList<Noun> nouns) {
         this.nouns.clear();
