@@ -13,7 +13,7 @@ public class Helper {
     public static final String ORIGINAL_NOUN_DATA_FILE =
             String.format("src%sdata%snoun_data_original.tsv", File.separator, File.separator);
     public static final int ACCENT_COLOR = 34; //blue
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "1.0.0";
 
     /**
      * @param x the x-coordinate of the noun(s).
